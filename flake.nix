@@ -2,11 +2,10 @@
   description = "Personal nix-darwin system flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
-
-    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -59,6 +58,12 @@
 
             # Docker / Colima Socket
             export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
+            # Alias for starting Colima with specific configurations
+            alias dstop="colima stop"
+            alias dlogs="colima logs"
+            alias dstatus="colima status"
+            alias drestart="colima restart"
+            alias dstart="colima start --cpu 2 --memory 4 --vm-type=vz --vz-rosetta"
 
             #NVM related
             export NVM_DIR="$HOME/.nvm"
@@ -104,13 +109,17 @@
               "discord"
               "ghostty"
               "anytype"
+              "obsidian"
               "capacities"
-              "microsoft-edge"
+              "google-drive"
               "google-chrome"
+              "microsoft-edge"
+              "jetbrains-toolbox"
             ];
             masApps = {
               "WhatsApp Messenger" = 310633997;
               #"Microsoft Copilot" = 6738511300;
+              # add readera
             };
             onActivation.cleanup = "zap";
           };
