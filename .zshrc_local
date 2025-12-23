@@ -1,0 +1,45 @@
+# Docker / Colima Socket
+export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
+
+# Alias for starting Colima with specific configurations
+alias dstop="colima stop"
+alias dlogs="colima logs"
+alias dstatus="colima status"
+alias drestart="colima restart"
+alias dstart="colima start --cpu 2 --memory 4 --vm-type=vz --vz-rosetta"
+
+# Adding the path for cargo binaries
+export PATH="$HOME/.cargo/bin:$PATH"
+
+#NVM related
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Autoload node version from nvim
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(cat "$nvmrc_path")
+
+    if [ "$node_version" != "v$nvmrc_node_version" ]; then
+      nvm use --silent
+    fi
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
+# Autoload direnv
+eval "$(direnv hook zsh)"
+
+
+# Load secrets from separate file (not in git)
+if [ -f ~/.zshrc_secrets ]; then
+  source ~/.zshrc_secrets
+fi

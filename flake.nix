@@ -9,12 +9,21 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Installing directly via opencode's flake.nix because the latest version is not available in nixpkgs
+    # This can be replaced with npm i opencode for simplicity, but this i did for now as an example for
+    # future myself to know how to add binaries directly from github if a flake.nix is avaliable in the source code
+    opencode = {
+      url = "github:sst/opencode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{
       self,
-      nix-darwin,
       nixpkgs,
+      opencode,
+      nix-darwin,
       nix-homebrew,
       home-manager,
     }:
@@ -34,42 +43,43 @@
         { pkgs, ... }:
         {
           home.stateVersion = "25.11";
+
+          # This "mounts" the file from the current flake folder to the home folder
+          home.file.".zshrc_local".source = ./.zshrc_local;
+
           home.packages = [
             pkgs.uv
             pkgs.gh
             pkgs.go
+            pkgs.bws
             pkgs.git
             pkgs.zig
             pkgs.nixd
             pkgs.rustc
+            pkgs.helix
             pkgs.cargo
+            pkgs.direnv
             pkgs.neovim
             pkgs.awscli2
+            pkgs.postgresql
+            pkgs.lazydocker
             pkgs.nixfmt-rfc-style
+            opencode.packages.${pkgs.stdenv.hostPlatform.system}.default
           ];
-          programs.zsh.enable = true;
-          programs.zsh.autosuggestion.enable = true;
-          programs.zsh.syntaxHighlighting.enable = true;
           programs.git.enable = true;
           programs.starship.enable = true;
-          programs.zsh.initContent = ''
-            # Cargo related
-            export PATH="$HOME/.cargo/bin:$PATH"
 
-            # Docker / Colima Socket
-            export DOCKER_HOST="unix://$HOME/.colima/default/docker.sock"
-            # Alias for starting Colima with specific configurations
-            alias dstop="colima stop"
-            alias dlogs="colima logs"
-            alias dstatus="colima status"
-            alias drestart="colima restart"
-            alias dstart="colima start --cpu 2 --memory 4 --vm-type=vz --vz-rosetta"
-
-            #NVM related
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-          '';
+          # Enable alternative shell support in nix-darwin.
+          programs.zsh = {
+            enable = true;
+            syntaxHighlighting.enable = true;
+            autosuggestion.enable = true;
+            initContent = ''
+              if [ -f ~/.zshrc_local ]; then
+                source ~/.zshrc_local
+              fi
+            '';
+          };
         };
       # System-wide configuration
       configuration =
@@ -84,7 +94,6 @@
             pkgs.docker
             pkgs.wezterm
             pkgs.docker-compose
-            # pkgs.gcc
           ];
           fonts = {
             packages = [
@@ -105,16 +114,21 @@
               "zen"
               "zed"
               "zoom"
+              "shottr"
+              "claude"
               "firefox"
               "discord"
               "ghostty"
               "anytype"
+              "pgadmin4"
               "obsidian"
               "capacities"
               "google-drive"
+              "sublime-text"
               "google-chrome"
               "microsoft-edge"
               "jetbrains-toolbox"
+              "karabiner-elements"
             ];
             masApps = {
               "WhatsApp Messenger" = 310633997;
@@ -126,9 +140,6 @@
 
           # Necessary for using flakes on this system.
           nix.settings.experimental-features = "nix-command flakes";
-
-          # Enable alternative shell support in nix-darwin.
-          programs.zsh.enable = true;
 
           # Set Git commit hash for darwin-version.
           system.configurationRevision = self.rev or self.dirtyRev or null;
