@@ -11,6 +11,25 @@ alias dstart="colima start --cpu 2 --memory 4 --vm-type=vz --vz-rosetta"
 # Adding the path for cargo binaries
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# Here I add exports for things installed outside of nix-darwin
+# Adding the path for deno
+export PATH="$HOME/.deno/bin:$PATH"
+eval "$(deno completions zsh)"
+
+# Adding the path for bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Droid cli from factory
+export PATH=/Users/ayush.porwal/.local/bin:$PATH
+
+# Amp code cli
+export PATH="$HOME/.amp/bin:$PATH"
+
+# This is from ami.dev, remove if not needed
+export AMI_INSTALL="$HOME/.ami"
+export PATH="$AMI_INSTALL/bin:$PATH"
+
 #NVM related
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

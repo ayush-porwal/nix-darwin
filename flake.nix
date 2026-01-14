@@ -36,6 +36,7 @@
         inherit system;
         config.allowUnfree = true;
       };
+
       operator-mono = pkgs.callPackage ./operator-mono.nix { };
 
       # Home Manager configuration
@@ -55,12 +56,15 @@
             pkgs.git
             pkgs.zig
             pkgs.nixd
+            pkgs.jdk25
             pkgs.rustc
             pkgs.helix
             pkgs.cargo
             pkgs.direnv
             pkgs.neovim
+            pkgs.ripgrep
             pkgs.awscli2
+            pkgs.cursor-cli
             pkgs.postgresql
             pkgs.lazydocker
             pkgs.nixfmt-rfc-style
@@ -110,25 +114,49 @@
           # Homebrew GUI apps
           homebrew = {
             enable = true;
+            taps = [
+              "steipete/tap"
+              "specstoryai/tap"
+            ];
+            brews = [
+              "mas"
+              "git-lfs"
+              "block-goose-cli"
+              "specstoryai/tap/specstory"
+            ];
             casks = [
               "zen"
+              # "kap"
               "zed"
+              "warp"
               "zoom"
+              "figma"
               "shottr"
               "claude"
+              "cursor"
+              "chatgpt"
               "firefox"
               "discord"
               "ghostty"
               "anytype"
+              "nordvpn"
               "pgadmin4"
               "obsidian"
+              "lm-studio"
+              "conductor"
               "capacities"
+              "block-goose"
+              "copilot-cli"
+              "antigravity"
               "google-drive"
               "sublime-text"
+              # "screen-studio"
               "google-chrome"
               "microsoft-edge"
+              "opencode-desktop"
               "jetbrains-toolbox"
               "karabiner-elements"
+              "steipete/tap/codexbar"
             ];
             masApps = {
               "WhatsApp Messenger" = 310633997;
