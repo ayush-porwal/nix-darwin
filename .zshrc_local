@@ -26,10 +26,6 @@ export PATH=/Users/ayush.porwal/.local/bin:$PATH
 # Amp code cli
 export PATH="$HOME/.amp/bin:$PATH"
 
-# This is from ami.dev, remove if not needed
-export AMI_INSTALL="$HOME/.ami"
-export PATH="$AMI_INSTALL/bin:$PATH"
-
 #NVM related
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

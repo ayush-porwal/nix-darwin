@@ -13,16 +13,16 @@
     # Installing directly via opencode's flake.nix because the latest version is not available in nixpkgs
     # This can be replaced with npm i opencode for simplicity, but this i did for now as an example for
     # future myself to know how to add binaries directly from github if a flake.nix is avaliable in the source code
-    opencode = {
-      url = "github:sst/opencode";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # opencode = {
+    #   # url = "github:sst/opencode";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
   outputs =
     inputs@{
       self,
       nixpkgs,
-      opencode,
+      # opencode,
       nix-darwin,
       nix-homebrew,
       home-manager,
@@ -68,7 +68,8 @@
             pkgs.postgresql
             pkgs.lazydocker
             pkgs.nixfmt-rfc-style
-            opencode.packages.${pkgs.stdenv.hostPlatform.system}.default
+            pkgs.maple-mono.NF-unhinted
+            # opencode.packages.${pkgs.stdenv.hostPlatform.system}.default
           ];
           programs.git.enable = true;
           programs.starship.enable = true;
@@ -115,21 +116,29 @@
           homebrew = {
             enable = true;
             taps = [
+              "millionco/ami"
               "steipete/tap"
+              "anomalyco/tap"
               "specstoryai/tap"
             ];
             brews = [
               "mas"
+              "ffmpeg"
+              "yt-dlp"
               "git-lfs"
               "block-goose-cli"
+              "anomalyco/tap/opencode"
               "specstoryai/tap/specstory"
             ];
             casks = [
+              "ami"
               "zen"
               # "kap"
               "zed"
               "warp"
               "zoom"
+              "trae"
+              "craft"
               "figma"
               "shottr"
               "claude"
@@ -140,11 +149,17 @@
               "ghostty"
               "anytype"
               "nordvpn"
+              "ticktick"
+              "orbstack"
               "pgadmin4"
               "obsidian"
+              # "windsurf"
               "lm-studio"
+              "tableplus"
+              "bitwarden"
               "conductor"
               "capacities"
+              "wispr-flow"
               "block-goose"
               "copilot-cli"
               "antigravity"
@@ -154,12 +169,15 @@
               "google-chrome"
               "microsoft-edge"
               "opencode-desktop"
+              "dbeaver-community"
               "jetbrains-toolbox"
               "karabiner-elements"
               "steipete/tap/codexbar"
+              "visual-studio-code@insiders"
             ];
             masApps = {
               "WhatsApp Messenger" = 310633997;
+              # "Bitwarden"= 1352778147;
               #"Microsoft Copilot" = 6738511300;
               # add readera
             };
